@@ -29,17 +29,8 @@ class Car(Vehicle):
 c = Car()
 c.info()
 
-# Example 4: Override with different parameters
-class Calculator:
-    def multiply(self, a, b):
-        print(a*b)
-class AdvancedCalculator(Calculator):
-    def multiply(self, a, b, c):
-        print(a*b*c)
-calc = AdvancedCalculator()
-calc.multiply(2,3,4)
 
-# Example 5: Multi-level overriding
+# Example 4: Multi-level overriding
 class A:
     def show(self):
         print("A")
