@@ -19,5 +19,3 @@ class Cat(Animal):
         print("Meow")
 c = Cat()
 c.speak()
-
-# Example 3: super() with multiple inheritance
