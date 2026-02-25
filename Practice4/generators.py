@@ -1,56 +1,78 @@
-#1Create a generator that generates the squares of numbers up to some number N.
+# --- ОПРЕДЕЛЕНИЕ ГЕНЕРАТОРОВ ---
+
+# 1. Квадраты чисел от 1 до N
 def squares_generator(n):
     for i in range(1, n + 1):
         yield i * i
-#Test
-n = int(input("Enter n: "))
-for square in squares_generator(n):
-    print(square)
 
-
-
-#2Write a program using generator to print the even numbers between 0 and n in comma separated form where n is input from console.
+# 2. Четные числа от 0 до N
 def even_generator(n):
     for i in range(0, n + 1, 2):
         yield i
-# Test
-n = int(input("Enter n: "))
-result = []
-for num in even_generator(n):
-    result.append(str(num))
-print(','.join(result))
 
-
-
-#3 Define a function with a generator which can iterate the numbers, which are divisible by 3 and 4, between a given range 0 and n.
+# 3. Числа, делящиеся на 3 и 4 (т.е. на 12)
 def divisible_generator(n):
     for i in range(0, n + 1):
         if i % 3 == 0 and i % 4 == 0:
             yield i
-#Test
-n = int(input("Enter n: "))
-for num in divisible_generator(n):
-    print(num, end=' ')
 
-
-
-#4Implement a generator called squares to yield the square of all numbers from (a) to (b). Test it with a "for" loop and print each of the yielded values.
+# 4. Квадраты в диапазоне от A до B
 def squares(a, b):
     for i in range(a, b + 1):
         yield i * i
-#Test
-a = int(input("Enter a: "))
-b = int(input("Enter b: "))
-for square in squares(a, b):
-    print(square)
 
-
-
-#5Implement a generator that returns all numbers from (n) down to 0.
+# 5. Обратный отсчет от N до 0
 def countdown(n):
     for i in range(n, -1, -1):
         yield i
-# Test
-n = int(input("Enter n: "))
-for num in countdown(n):
-    print(num)
+
+
+# --- ТЕСТОВЫЙ БЛОК ---
+
+def run_tests():
+    try:
+        print("=== Запуск тестов генераторов ===\n")
+
+        # Тест 1
+        print("Задание 1: Квадраты от 1 до N")
+        n1 = int(input("Введите N: "))
+        print("Результат:", list(squares_generator(n1)))
+        print("-" * 30)
+
+        # Тест 2
+        print("Задание 2: Четные числа через запятую")
+        n2 = int(input("Введите N: "))
+        result = [str(num) for num in even_generator(n2)]
+        print("Результат:", ",".join(result))
+        print("-" * 30)
+
+        # Тест 3
+        print("Задание 3: Делятся на 3 и 4")
+        n3 = int(input("Введите N: "))
+        print("Результат:", end=" ")
+        for num in divisible_generator(n3):
+            print(num, end=" ")
+        print("\n" + "-" * 30)
+
+        # Тест 4
+        print("Задание 4: Квадраты от A до B")
+        a = int(input("Введите начало (A): "))
+        b = int(input("Введите конец (B): "))
+        print("Результат:")
+        for sq in squares(a, b):
+            print(sq, end=" ")
+        print("\n" + "-" * 30)
+
+        # Тест 5
+        print("Задание 5: Обратный отсчет")
+        n5 = int(input("Введите N: "))
+        print("Результат:")
+        for num in countdown(n5):
+            print(num, end=" ")
+        print("\n\nВсе тесты завершены!")
+
+    except ValueError:
+        print("\nОшибка: Пожалуйста, вводите только целые числа.")
+
+if __name__ == "__main__":
+    run_tests()
