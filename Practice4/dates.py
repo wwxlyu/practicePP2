@@ -15,7 +15,6 @@ print(today + timedelta(days=1))
 
 #3 Write a Python program to drop microseconds from datetime.
 from datetime import datetime
-
 print(datetime.now().replace(microsecond=0))
 
 
