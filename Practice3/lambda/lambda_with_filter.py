@@ -18,7 +18,3 @@ numbers = [-5, 3, -1, 0, 2]
 negatives = list(filter(lambda x: x < 0, numbers))
 print(negatives)
 
-# Example 5: Filter words starting with 'a'
-words = ["apple", "banana", "avocado", "cherry"]
-a_words = list(filter(lambda w: w.startswith('a'), words))
-print(a_words)
