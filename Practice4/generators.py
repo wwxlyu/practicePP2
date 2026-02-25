@@ -27,7 +27,7 @@ def countdown(n):
         yield i
 
 
-# --- ТЕСТОВЫЙ БЛОК ---
+#Тестовый
 
 def run_tests():
     try:
