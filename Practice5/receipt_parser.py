@@ -13,29 +13,29 @@ def parse_receipt(file_path):
 
     result = {}
 
-    # 1. Extract all prices
+    #1Extract all prices
     price_pattern = r'\d{1,3}(?: \d{3})*,\d{2}'
     prices = re.findall(price_pattern, text)
     result["all_prices"] = prices
 
-    # 2. Extract product names
+    #2Extract product names
     product_pattern = r'\d+\.\s*\n(.+?)\n\d+,\d{3} x'
     products = re.findall(product_pattern, text, re.DOTALL)
     result["products"] = [p.strip() for p in products]
 
-    # 3. Extract total amount
+    #3Extract total amount
     total_pattern = r'ИТОГО:\s*\n([\d ]+,\d{2})'
     total_match = re.search(total_pattern, text)
     if total_match:
         result["total_amount"] = clean_price(total_match.group(1))
 
-    # 4. Extract date and time
+    #4Extract date and time
     date_pattern = r'Время:\s*(\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}:\d{2})'
     date_match = re.search(date_pattern, text)
     if date_match:
         result["datetime"] = date_match.group(1)
 
-    # 5. Extract payment method
+    #5Extract payment method
     payment_pattern = r'(Банковская карта|Наличные)'
     payment_match = re.search(payment_pattern, text)
     if payment_match:
