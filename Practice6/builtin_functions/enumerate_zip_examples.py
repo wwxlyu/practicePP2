@@ -1,3 +1,4 @@
+#enumarate (return index and value)
 words = ["a", "b", "c"]
 
 for i, word in enumerate(words):
@@ -5,6 +6,6 @@ for i, word in enumerate(words):
 
 nums = [1, 2, 3]
 letters = ["a", "b", "c"]
-
+#zip (combines into pairs)
 for n, l in zip(nums, letters):
     print(n, l)

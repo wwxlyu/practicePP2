@@ -5,8 +5,22 @@ even = list(filter(lambda x: x % 2 == 0, nums))
 print(squared)
 print(even)
 
-""" #reduce()
-from functools import reduce
+#reduce() combining all elements into one value
+nums = [1, 2, 3, 4]
+total = 0
+for num in nums:
+    total += num
+print(total)
+
+"""from functools import reduce #functools for escape loops
 nums = [1, 2, 3, 4]
 total = reduce(lambda x, y: x + y, nums)
 print(total)"""
+
+
+#check types
+x = "123"
+print(type(x))
+
+#transforming into int etc
+num = int(x)
