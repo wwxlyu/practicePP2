@@ -6,16 +6,10 @@ print(squared)
 print(even)
 
 #reduce() combining all elements into one value
-nums = [1, 2, 3, 4]
-total = 0
-for num in nums:
-    total += num
-print(total)
-
-"""from functools import reduce #functools for escape loops
+from functools import reduce #functools for escape loops
 nums = [1, 2, 3, 4]
 total = reduce(lambda x, y: x + y, nums)
-print(total)"""
+print(total)
 
 
 #check types
