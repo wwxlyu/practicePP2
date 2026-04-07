@@ -7,7 +7,7 @@ def load_config(filename='database.ini', section='postgresql'):
     file_path = os.path.join(base_dir, filename)
 
     parser.read(file_path)
-    # get section, default to postgresql
+    #get section, default to postgresql
     config = {}
     if parser.has_section(section):
         params = parser.items(section)
