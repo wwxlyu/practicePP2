@@ -1,6 +1,7 @@
 import psycopg2
-import csv
 from config import load_config
+import csv
+import os
 
 class PhoneBookApp:
     def __init__(self):
@@ -73,12 +74,20 @@ class PhoneBookApp:
         print("Бд готова.")
 
     def import_from_csv(self, filename):
-        with open(filename, 'r') as f:
-            reader = csv.reader(f)
-            next(reader) # пропустить заголовок
-            for name, phone in reader:
-                self.upsert(name, phone)
-        print("CSV imported.")
+        # Get the directory where phonebook.py is located
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        # Join it with the filename
+        file_path = os.path.join(base_dir, filename)
+        
+        try:
+            with open(file_path, 'r') as f:
+                reader = csv.reader(f)
+                next(reader) # skip header
+                for name, phone in reader:
+                    self.upsert(name, phone)
+            print("CSV imported successfully.")
+        except FileNotFoundError:
+            print(f"Error: The file {filename} was not found in {base_dir}")
 
     def console_insert(self):
         name = input("Enter name: ")
