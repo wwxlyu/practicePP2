@@ -2,15 +2,15 @@ import psycopg2
 import csv
 import os
 from config import load_config
+
 class PhoneBookApp:
     def __init__(self):
-        #загрузка из database.ini через config.py
         self.config = load_config()
         self.prepare_database()
 
     def prepare_database(self):
         commands = [
-            #создание табл
+            #Таблица
             """
             CREATE TABLE IF NOT EXISTS phonebook (
                 id SERIAL PRIMARY KEY,
@@ -18,7 +18,7 @@ class PhoneBookApp:
                 phone_number VARCHAR(20) NOT NULL
             );
             """,
-            #функция поиска 
+            #Поиск
             """
             CREATE OR REPLACE FUNCTION search_contacts(pattern TEXT)
             RETURNS TABLE (id INT, username VARCHAR, phone_number VARCHAR) AS $$
@@ -30,7 +30,7 @@ class PhoneBookApp:
             END;
             $$ LANGUAGE plpgsql;
             """,
-            #функция для пагинации
+            #Пагинация
             """
             CREATE OR REPLACE FUNCTION get_paginated_contacts(p_limit INT, p_offset INT)
             RETURNS TABLE (id INT, username VARCHAR, phone_number VARCHAR) AS $$
@@ -42,7 +42,7 @@ class PhoneBookApp:
             END;
             $$ LANGUAGE plpgsql;
             """,
-            #Процедура Upsert (Insert or Update)
+            #Upsert (Вставка или обновление по имени)
             """
             CREATE OR REPLACE PROCEDURE upsert_contact(p_name VARCHAR, p_phone VARCHAR)
             AS $$
@@ -54,12 +54,27 @@ class PhoneBookApp:
             END;
             $$ LANGUAGE plpgsql;
             """,
-            #Процедура дилейт
+            #Удаление
             """
             CREATE OR REPLACE PROCEDURE delete_contact_proc(p_ident VARCHAR)
             AS $$
             BEGIN
                 DELETE FROM phonebook WHERE username = p_ident OR phone_number = p_ident;
+            END;
+            $$ LANGUAGE plpgsql;
+            """,
+            #Процедура обновления (Update)
+            """
+            CREATE OR REPLACE PROCEDURE update_contact(p_target VARCHAR, p_new_value VARCHAR, p_mode INT)
+            AS $$
+            BEGIN
+                -- mode 1: Обновить телефон по имени пользователя
+                IF p_mode = 1 THEN
+                    UPDATE phonebook SET phone_number = p_new_value WHERE username = p_target;
+                -- mode 2: Обновить имя пользователя по номеру телефона
+                ELSIF p_mode = 2 THEN
+                    UPDATE phonebook SET username = p_new_value WHERE phone_number = p_target;
+                END IF;
             END;
             $$ LANGUAGE plpgsql;
             """
@@ -70,48 +85,45 @@ class PhoneBookApp:
                 for cmd in commands:
                     cur.execute(cmd)
             conn.commit()
-        print("database is ready.")
+        print("Database is ready with all procedures.")
 
     def import_from_csv(self, filename):
-        # Get the directory where phonebook.py is located
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        # Join it with the filename
         file_path = os.path.join(base_dir, filename)
-        
         try:
             with open(file_path, 'r') as f:
                 reader = csv.reader(f)
-                next(reader) # skip header
+                next(reader) 
                 for name, phone in reader:
                     self.upsert(name, phone)
             print("CSV imported successfully.")
         except FileNotFoundError:
-            print(f"Error: The file {filename} was not found in {base_dir}")
+            print(f"Error: The file {filename} was not found.")
 
     def console_insert(self):
         name = input("Enter name: ")
         phone = input("Enter phone: ")
         self.upsert(name, phone)
+
     def upsert(self, name, phone):
         with psycopg2.connect(**self.config) as conn:
             with conn.cursor() as cur:
                 cur.execute("CALL upsert_contact(%s, %s)", (name, phone))
             conn.commit()
-        print(f"Contact {name} add/upd.")
+        print(f"Contact {name} processed.")
+
+    #обновление
+    def update(self, target, new_value, mode):
+        with psycopg2.connect(**self.config) as conn:
+            with conn.cursor() as cur:
+                cur.execute("CALL update_contact(%s, %s, %s)", (target, new_value, mode))
+            conn.commit()
+        print(f"Update for {target} completed.")
 
     def search(self, text):
-        print(f"\nresults of search '{text}':")
         with psycopg2.connect(**self.config) as conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT * FROM search_contacts(%s)", (text,))
-                for row in cur.fetchall():
-                    print(row)
-
-    def get_page(self, limit, offset):
-        print(f"\nPage of data (limit {limit}, offset {offset}):")
-        with psycopg2.connect(**self.config) as conn:
-            with conn.cursor() as cur:
-                cur.execute("SELECT * FROM get_paginated_contacts(%s, %s)", (limit, offset))
                 for row in cur.fetchall():
                     print(row)
 
@@ -120,11 +132,12 @@ class PhoneBookApp:
             with conn.cursor() as cur:
                 cur.execute("CALL delete_contact_proc(%s)", (identifier,))
             conn.commit()
-        print(f"Comtact {identifier} deleted.")
+        print(f"Contact {identifier} deleted.")
+
 if __name__ == "__main__":
-       app = PhoneBookApp()
-       while True:
-        print("\n1. Insert from Console\n2. Import from CSV\n3. Search\n4. Delete\n5. Exit")
+    app = PhoneBookApp()
+    while True:
+        print("\n1. Insert from Console\n2. Import from CSV\n3. Search\n4. Delete\n5. Update\n6. Exit")
         choice = input("Choose: ")
         
         if choice == '1':
@@ -134,16 +147,15 @@ if __name__ == "__main__":
         elif choice == '3':
             s = input("Search for: ")
             app.search(s)
-        # и так далее...
-
-"""if __name__ == "__main__":
-    app = PhoneBookApp()
-    
-    #demo
-    app.upsert("Ayzhamal", "87071112233")
-    app.upsert("Ayzhamal", "87770000000") #Upd , because same name
-    app.upsert("TestUser", "87001234567")
-    
-    app.search("Ayz")
-    app.get_page(1, 0) #show only 1 
-    app.delete("TestUser")"""
+        elif choice == '4':
+            ident = input("Enter name or phone to delete: ")
+            app.delete(ident)
+        elif choice == '5':
+            print("1. Update phone by name\n2. Update name by phone")
+            m = int(input("Choose mode: "))
+            t = input("Enter target (name or phone): ")
+            v = input("Enter new value: ")
+            app.update(t, v, m)
+        elif choice == '6':
+            print("Goodbye!")
+            break
