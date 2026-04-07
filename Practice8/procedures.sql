@@ -9,7 +9,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Удаление
+--дилейт
 CREATE OR REPLACE PROCEDURE delete_contact_proc(p_ident VARCHAR)
 AS $$
 BEGIN
@@ -17,7 +17,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- массовая вставка с валидацией (Задача 3.2 пункт 3)
+-- массовая вставка с валидацией
 -- принимает массив имен и массив телефонов
 CREATE OR REPLACE FUNCTION insert_many_with_validation(p_names VARCHAR[], p_phones VARCHAR[])
 RETURNS TABLE (invalid_name VARCHAR, invalid_phone VARCHAR) AS $$

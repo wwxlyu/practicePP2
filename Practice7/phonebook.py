@@ -70,7 +70,7 @@ class PhoneBookApp:
                 for cmd in commands:
                     cur.execute(cmd)
             conn.commit()
-        print("Бд готова.")
+        print("database is ready.")
 
     def import_from_csv(self, filename):
         # Get the directory where phonebook.py is located
