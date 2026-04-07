@@ -1,4 +1,5 @@
 import psycopg2
+import csv
 from config import load_config
 
 class PhoneBookApp:
@@ -71,6 +72,18 @@ class PhoneBookApp:
             conn.commit()
         print("Бд готова.")
 
+    def import_from_csv(self, filename):
+        with open(filename, 'r') as f:
+            reader = csv.reader(f)
+            next(reader) # пропустить заголовок
+            for name, phone in reader:
+                self.upsert(name, phone)
+        print("CSV imported.")
+
+    def console_insert(self):
+        name = input("Enter name: ")
+        phone = input("Enter phone: ")
+        self.upsert(name, phone)
     def upsert(self, name, phone):
         with psycopg2.connect(**self.config) as conn:
             with conn.cursor() as cur:
@@ -100,8 +113,22 @@ class PhoneBookApp:
                 cur.execute("CALL delete_contact_proc(%s)", (identifier,))
             conn.commit()
         print(f"Comtact {identifier} deleted.")
-        
 if __name__ == "__main__":
+       app = PhoneBookApp()
+       while True:
+        print("\n1. Insert from Console\n2. Import from CSV\n3. Search\n4. Delete\n5. Exit")
+        choice = input("Choose: ")
+        
+        if choice == '1':
+            app.console_insert()
+        elif choice == '2':
+            app.import_from_csv('contacts.csv')
+        elif choice == '3':
+            s = input("Search for: ")
+            app.search(s)
+        # и так далее...
+
+"""if __name__ == "__main__":
     app = PhoneBookApp()
     
     #demo
@@ -111,4 +138,4 @@ if __name__ == "__main__":
     
     app.search("Ayz")
     app.get_page(1, 0) #show only 1 
-    app.delete("TestUser")
+    app.delete("TestUser")"""
