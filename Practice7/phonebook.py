@@ -1,8 +1,7 @@
 import psycopg2
-from config import load_config
 import csv
 import os
-
+from config import load_config
 class PhoneBookApp:
     def __init__(self):
         #загрузка из database.ini через config.py
@@ -43,7 +42,7 @@ class PhoneBookApp:
             END;
             $$ LANGUAGE plpgsql;
             """,
-            #Процедур Upsert (Insert or Update)
+            #Процедура Upsert (Insert or Update)
             """
             CREATE OR REPLACE PROCEDURE upsert_contact(p_name VARCHAR, p_phone VARCHAR)
             AS $$
