@@ -8,7 +8,6 @@ class PhoneBookApp:
         self.prepare_database()
 
     def prepare_database(self):
-        #Создаем таблицу, если её нет
         create_table = """
         CREATE TABLE IF NOT EXISTS phonebook (
             id SERIAL PRIMARY KEY,
@@ -29,14 +28,14 @@ class PhoneBookApp:
                 cur.execute(functions_script)
                 cur.execute(procedures_script)
             conn.commit()
-        print("База данных и функции обновлены из SQL файлов.")
+        print("Database and func updated from sql files.")
 
     def upsert(self, name, phone):
         with psycopg2.connect(**self.config) as conn:
             with conn.cursor() as cur:
                 cur.execute("CALL upsert_contact(%s, %s)", (name, phone))
             conn.commit()
-        print(f"Контакт {name} добавлен/обновлен.")
+        print(f"Contact {name} added/updated.")
 
     def bulk_insert(self, names, phones):
         print("\n--- Массовая вставка с валидацией ---")
@@ -46,11 +45,11 @@ class PhoneBookApp:
                 cur.execute("SELECT * FROM insert_many_with_validation(%s, %s)", (names, phones))
                 errors = cur.fetchall()
                 if errors:
-                    print("Ошибки в следующих данных:")
+                    print("Error in next:")
                     for err in errors:
-                        print(f"Имя: {err[0]}, Телефон: {err[1]} (Неверный формат)")
+                        print(f"Name: {err[0]}, Phonenumber: {err[1]} (incorrect format)")
                 else:
-                    print("Все данные успешно добавлены.")
+                    print("All correct.")
             conn.commit()
 
     def search(self, text):
@@ -65,25 +64,24 @@ class PhoneBookApp:
             with conn.cursor() as cur:
                 cur.execute("CALL delete_contact_proc(%s)", (identifier,))
             conn.commit()
-        print(f"Контакт {identifier} удален.")
+        print(f"Contact {identifier} deleted.")
 
 if __name__ == "__main__":
     app = PhoneBookApp()
     
     while True:
-        print("\n1. Ввод из консоли\n2. Массовая вставка (тест валидации)\n3. Поиск\n4. Удаление\n5. Выход")
-        choice = input("Выберите действие: ")
+        print("\n1. Enter\n2. mass insert\n3. Search\n4. Delete\n5. Quit")
+        choice = input("Choose action: ")
 
         if choice == '1':
-            app.upsert(input("Имя: "), input("Телефон: "))
+            app.upsert(input("Name: "), input("Phonenumber: "))
         elif choice == '2':
-            #Пример данных: Тест1 - ок, Тест2 - ошибка (буквы в телефоне)
             names = ["ValidUser", "InvalidUser"]
             phones = ["87071112233", "8707ERROR"]
             app.bulk_insert(names, phones)
         elif choice == '3':
-            app.search(input("Что ищем: "))
+            app.search(input("Searching: "))
         elif choice == '4':
-            app.delete(input("Имя или телефон для удаления: "))
+            app.delete(input("Name or phonenumber for del: "))
         elif choice == '5':
             break
