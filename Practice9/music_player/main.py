@@ -16,7 +16,7 @@ class AudioApp:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        pygame.display.set_caption("Lofi Pink Player")
+        pygame.display.set_caption("Player")
         self.clock = pygame.time.Clock()
         
         # Setup paths
