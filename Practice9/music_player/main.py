@@ -2,16 +2,15 @@ import pygame
 import os
 from player import MusicPlayer
 
-# Constants
 SCREEN_WIDTH, SCREEN_HEIGHT = 500, 350
 FPS = 30
 
-# Colors (Pink Aesthetic)
-BG_COLOR = (255, 240, 245)     # Lavender Blush
-CARD_COLOR = (255, 255, 255)   # White
-ACCENT_COLOR = (255, 182, 193) # Light Pink
-PROGRESS_COLOR = (255, 20, 147) # Deep Pink
-TEXT_PRIMARY = (75, 0, 130)    # Indigo-ish for contrast
+# Colors 
+BG_COLOR = (255, 240, 245)     #Lavender Blush
+CARD_COLOR = (255, 255, 255)   #White
+ACCENT_COLOR = (255, 182, 193) #Light Pink
+PROGRESS_COLOR = (255, 20, 147) #Deep Pink
+TEXT_PRIMARY = (75, 0, 130)    #Indigo-ish for contrast
 
 class AudioApp:
     def __init__(self):
@@ -25,7 +24,6 @@ class AudioApp:
         music_path = os.path.join(base_path, "music", "sample_tracks")
         self.player = MusicPlayer(music_path)
         
-        # Fonts
         self.title_font = pygame.font.SysFont("Arial", 22, bold=True)
         self.small_font = pygame.font.SysFont("Arial", 14)
         
@@ -38,26 +36,25 @@ class AudioApp:
 
     def draw_interface(self):
         self.screen.fill(BG_COLOR)
-        
-        # Main UI Card
+
         pygame.draw.rect(self.screen, CARD_COLOR, (40, 40, 420, 220), border_radius=15)
         
-        # Fetching info
+        #Fetching info
         track_name, status_label = self.player.get_info()
         
-        # Drawing Song Icon (Circle and Note)
+        #Drawing Song Icon
         pygame.draw.circle(self.screen, ACCENT_COLOR, (100, 100), 30)
         pygame.draw.rect(self.screen, TEXT_PRIMARY, (110, 80, 4, 30))
         
-        # Text Rendering
+        #Text Rendering
         name_surf = self.title_font.render(track_name, True, TEXT_PRIMARY)
         self.screen.blit(name_surf, (150, 85))
         
         status_surf = self.small_font.render(status_label, True, PROGRESS_COLOR)
         self.screen.blit(status_surf, (150, 115))
 
-        # Progress Bar Logic
-        current_time = pygame.mixer.music.get_pos() / 1000 # Convert to seconds
+        #Progress Bar Logic
+        current_time = pygame.mixer.music.get_pos() / 1000 #Convert to seconds
         total_time = self.player.song_duration
         
         bar_rect = pygame.Rect(80, 180, 340, 6)
@@ -67,12 +64,12 @@ class AudioApp:
             progress_width = min((current_time / total_time) * 340, 340)
             pygame.draw.rect(self.screen, PROGRESS_COLOR, (80, 180, progress_width, 6), border_radius=3)
             
-            # Timestamps
+            #Timestamps
             time_str = f"{self.format_timestamp(current_time)} / {self.format_timestamp(total_time)}"
             time_surf = self.small_font.render(time_str, True, TEXT_PRIMARY)
             self.screen.blit(time_surf, (SCREEN_WIDTH // 2 - time_surf.get_width() // 2, 200))
 
-        # Bottom Hints
+        #Bottom Hints
         hints = "P: Play | S: Stop | N: Next | B: Previous"
         hint_surf = self.small_font.render(hints, True, (150, 100, 120))
         self.screen.blit(hint_surf, (SCREEN_WIDTH // 2 - hint_surf.get_width() // 2, 300))

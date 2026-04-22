@@ -2,7 +2,7 @@ import datetime
 
 class ClockLogic:
     def __init__(self):
-        # Initial values
+        #Initial values
         self.seconds = 0
         self.minutes = 0
         self.hour = 0
@@ -19,10 +19,10 @@ class ClockLogic:
         Calculates rotation angles for Mickey's hands.
         Formula: (units / total_units) * 360 degrees.
         """
-        # 6 degrees per second (360/60)
+        #degrees per second (360/60)
         sec_angle = self.seconds * 6
         
-        # 6 degrees per minute + smooth offset based on seconds
+        #degrees per minute + smooth offset based on seconds
         min_angle = (self.minutes * 6) + (self.seconds / 10)
         
         return sec_angle, min_angle

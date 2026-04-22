@@ -5,7 +5,7 @@ class MusicPlayer:
     def __init__(self, music_dir):
         pygame.mixer.init()
         self.music_dir = music_dir
-        # Filtering only audio files
+        #Filtering only audio files
         self.playlist = [f for f in os.listdir(music_dir) if f.endswith(('.mp3', '.wav'))]
         self.current_index = 0
         self.is_paused = False
@@ -18,14 +18,14 @@ class MusicPlayer:
         path = os.path.join(self.music_dir, self.playlist[self.current_index])
         pygame.mixer.music.load(path)
         
-        # Pre-load duration to avoid lag in the main loop
+        #Pre-load duration to avoid lag in the main loop
         temp_sound = pygame.mixer.Sound(path)
         self.song_duration = temp_sound.get_length()
 
     def play(self):
         if not self.playlist: return
         
-        # If it was stopped or track changed, reload and play
+        #If it was stopped or track changed, reload and play
         if not pygame.mixer.music.get_busy() and not self.is_paused:
             self.load_track()
             pygame.mixer.music.play()
