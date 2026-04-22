@@ -4,7 +4,7 @@ from clock import ClockLogic
 
 #Initialization
 pygame.init()
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 900, 900
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Mickey Clock")
 
