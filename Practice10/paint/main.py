@@ -8,7 +8,7 @@ pygame.init()
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Simple Paint Practice")
+pygame.display.set_caption("Paint")
 
 # Initial background setup
 BG_COLOR = (255, 255, 255) 
@@ -30,7 +30,7 @@ font = pygame.font.SysFont("Arial", 16)
 
 def show_instructions():
     # Simple UI text for user instructions
-    msg = "Modes: [R]ect, [C]ircle, [E]raser | Colors: [1]Red, [2]Green, [3]Blue, [4]Black"
+    msg = "[R]ect, [C]ircle, [E]raser | Colors: [1]Red, [2]Green, [3]Blue, [4]Black"
     text_surf = font.render(msg, True, (100, 100, 100))
     # Clear top area for text
     pygame.draw.rect(SCREEN, (240, 240, 240), (0, 0, SCREEN_WIDTH, 30))
