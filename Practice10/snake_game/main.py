@@ -4,7 +4,6 @@ from snakeee import Snake, Food, WIDTH, HEIGHT, BLOCK_SIZE
 
 pygame.init()
 
-# Simple Palette
 BG_COLOR = (255, 245, 238)    # Cream
 SNAKE_COLOR = (147, 197, 114) # Pastel Green
 FOOD_COLOR = (255, 105, 180)  # Pink

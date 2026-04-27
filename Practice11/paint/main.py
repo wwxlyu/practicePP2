@@ -7,7 +7,7 @@ pygame.init()
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 SCREEN = pygame.display.set_mode((900, 700))
-pygame.display.set_caption("Paint Practice 11")
+pygame.display.set_caption("Paint")
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)

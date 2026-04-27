@@ -45,7 +45,7 @@ class Coin(pygame.sprite.Sprite):
         self.spawn()
 
     def spawn(self):
-        # Generates a new position for the coin above the screen
+        #Generates a new position for the coin above the screen
         self.rect.center = (random.randint(30, SCREEN_WIDTH - 30), random.randint(-100, -30))
 
     def move(self):

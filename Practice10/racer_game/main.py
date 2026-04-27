@@ -8,7 +8,7 @@ FPS = 60
 FramePerSec = pygame.time.Clock()
 
 SCREEN = pygame.display.set_mode((400, 600))
-pygame.display.set_caption("Racer Practice 10")
+pygame.display.set_caption("Racer")
 
 font = pygame.font.SysFont("Verdana", 20)
 

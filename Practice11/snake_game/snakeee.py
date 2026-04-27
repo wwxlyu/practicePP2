@@ -32,11 +32,11 @@ class Food:
         self.spawn(snake_body)
 
     def spawn(self, snake_body):
-        # Task 1: Random weight (1 or 3)
+        # Random weight (1 or 3)
         self.weight = random.choice([1, 1, 1, 3])
         self.color = (255, 105, 180) if self.weight == 1 else (255, 215, 0) # Pink or Gold
         
-        # Task 2: Timer for disappearing (5000 ms = 5 seconds)
+        # Timer for disappearing (5000 ms = 5 seconds)
         self.spawn_time = pygame.time.get_ticks()
         self.lifetime = 5000 
         
