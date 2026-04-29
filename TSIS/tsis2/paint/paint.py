@@ -2,11 +2,9 @@ import pygame
 import datetime
 from tools import draw_shape, flood_fill
 
-# start up pygame and fonts
 pygame.init()
 pygame.font.init()
 
-# screen size and speed
 WIDTH, HEIGHT = 1000, 700
 FPS = 120
 
@@ -21,7 +19,7 @@ COLORS = {
 
 # set up the main window
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Extended Paint App - TSIS 2")
+pygame.display.set_caption("Extended Paint App")
 
 # this is the main drawing surface where things stay permanently
 canvas = pygame.Surface((WIDTH, HEIGHT))
@@ -32,7 +30,6 @@ font = pygame.font.SysFont('Arial', 24)
 ui_font = pygame.font.SysFont('Arial', 16)
 
 def draw_ui(current_tool, current_color, current_size):
-    """just draws a bar at the top showing what tool/color is active"""
     ui_rect = pygame.Rect(0, 0, WIDTH, 30)
     pygame.draw.rect(screen, (200, 200, 200), ui_rect)
     pygame.draw.line(screen, (100, 100, 100), (0, 30), (WIDTH, 30), 2)
