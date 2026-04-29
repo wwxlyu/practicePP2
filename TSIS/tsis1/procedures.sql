@@ -1,41 +1,48 @@
--- Upsert (вставка или обновление телефона)
-CREATE OR REPLACE PROCEDURE upsert_contact(p_name VARCHAR, p_phone VARCHAR)
+-- Procedure to add phone by contact name
+CREATE OR REPLACE PROCEDURE add_phone(
+    p_name VARCHAR, 
+    p_phone VARCHAR, 
+    p_type VARCHAR DEFAULT 'mobile'
+)
+LANGUAGE plpgsql
 AS $$
-BEGIN
-    INSERT INTO phonebook (username, phone_number)
-    VALUES (p_name, p_phone)
-    ON CONFLICT (username) 
-    DO UPDATE SET phone_number = EXCLUDED.phone_number;
-END;
-$$ LANGUAGE plpgsql;
-
---дилейт
-CREATE OR REPLACE PROCEDURE delete_contact_proc(p_ident VARCHAR)
-AS $$
-BEGIN
-    DELETE FROM phonebook WHERE username = p_ident OR phone_number = p_ident;
-END;
-$$ LANGUAGE plpgsql;
-
--- массовая вставка с валидацией
--- принимает массив имен и массив телефонов
-CREATE OR REPLACE FUNCTION insert_many_with_validation(p_names VARCHAR[], p_phones VARCHAR[])
-RETURNS TABLE (invalid_name VARCHAR, invalid_phone VARCHAR) AS $$
 DECLARE
-    i INT;
+    v_id INTEGER;
 BEGIN
-    FOR i IN 1 .. array_upper(p_names, 1) LOOP
-        -- простая валидация: номер должен состоять только из цифр и быть длиннее 10 символов
-        IF p_phones[i] ~ '^[0-9]+$' AND length(p_phones[i]) >= 10 THEN
-            INSERT INTO phonebook (username, phone_number)
-            VALUES (p_names[i], p_phones[i])
-            ON CONFLICT (username) DO UPDATE SET phone_number = EXCLUDED.phone_number;
-        ELSE
-            -- если данные неверны, добавляем их в таблицу "плохих" данных для возврата
-            invalid_name := p_names[i];
-            invalid_phone := p_phones[i];
-            RETURN NEXT;
-        END IF;
-    END LOOP;
+    SELECT id INTO v_id FROM contacts WHERE first_name = p_name LIMIT 1;
+    
+    IF v_id IS NOT NULL THEN
+        INSERT INTO phones (contact_id, phone, type) VALUES (v_id, p_phone, p_type);
+        RAISE NOTICE 'Phone added successfully';
+    ELSE
+        RAISE EXCEPTION 'Contact "%" not found', p_name;
+    END IF;
 END;
-$$ LANGUAGE plpgsql;
+$$;
+
+-- Procedure to move contact to group (creates group if doesn't exist)
+CREATE OR REPLACE PROCEDURE move_to_group(
+    p_name VARCHAR, 
+    p_group_name VARCHAR
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_contact_id INTEGER;
+    v_group_id INTEGER;
+BEGIN
+    SELECT id INTO v_contact_id FROM contacts WHERE first_name = p_name LIMIT 1;
+    
+    IF v_contact_id IS NULL THEN
+        RAISE EXCEPTION 'Contact "%" not found', p_name;
+    END IF;
+    
+    -- Create group if it doesn't exist
+    INSERT INTO groups (name) VALUES (p_group_name) ON CONFLICT (name) DO NOTHING;
+    SELECT id INTO v_group_id FROM groups WHERE name = p_group_name;
+    
+    -- Update contact's group
+    UPDATE contacts SET group_id = v_group_id WHERE id = v_contact_id;
+    RAISE NOTICE 'Contact moved to group "%"', p_group_name;
+END;
+$$;

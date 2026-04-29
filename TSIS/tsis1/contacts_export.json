@@ -1,0 +1,106 @@
+[
+  {
+    "name": "фффф",
+    "last_name": "ыыыы",
+    "email": "ыфаваыв",
+    "birthday": "2000-12-12",
+    "group": null,
+    "phones": [
+      {
+        "phone": null,
+        "type": null
+      }
+    ]
+  },
+  {
+    "name": "sixseven",
+    "last_name": "mr",
+    "email": "mrsixseven@gmail.com",
+    "birthday": "2006-07-06",
+    "group": null,
+    "phones": [
+      {
+        "phone": "87776766767",
+        "type": "work"
+      }
+    ]
+  },
+  {
+    "name": "атпрп",
+    "last_name": null,
+    "email": "птаоптлоап",
+    "birthday": "2000-12-12",
+    "group": null,
+    "phones": [
+      {
+        "phone": null,
+        "type": null
+      }
+    ]
+  },
+  {
+    "name": "ellie",
+    "last_name": null,
+    "email": "lloi",
+    "birthday": "2222-02-24",
+    "group": null,
+    "phones": [
+      {
+        "phone": null,
+        "type": null
+      }
+    ]
+  },
+  {
+    "name": "sixseven",
+    "last_name": "mr",
+    "email": "sixseven@",
+    "birthday": "2000-12-12",
+    "group": null,
+    "phones": [
+      {
+        "phone": null,
+        "type": null
+      }
+    ]
+  },
+  {
+    "name": "oioioi",
+    "last_name": "hhhuhuh",
+    "email": "jifdjgkfhu@gmail.com",
+    "birthday": "2022-02-25",
+    "group": null,
+    "phones": [
+      {
+        "phone": "87774562625",
+        "type": "home"
+      }
+    ]
+  },
+  {
+    "name": "нпрмп",
+    "last_name": null,
+    "email": "оглпномпрм",
+    "birthday": "2222-12-14",
+    "group": null,
+    "phones": [
+      {
+        "phone": null,
+        "type": null
+      }
+    ]
+  },
+  {
+    "name": "dididid",
+    "last_name": null,
+    "email": "dodododid@gmail.com",
+    "birthday": "2000-02-15",
+    "group": null,
+    "phones": [
+      {
+        "phone": null,
+        "type": null
+      }
+    ]
+  }
+]

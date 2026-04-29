@@ -1,21 +1,21 @@
+# config.py
 import os
 from configparser import ConfigParser
-def load_config(filename='database.ini', section='postgresql'):
-    parser = ConfigParser()
 
+def load_config(filename='database.ini', section='postgresql'):
+    # Helper to find the file in the same folder as this script
     base_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(base_dir, filename)
 
+    parser = ConfigParser()
     parser.read(file_path)
-    #get section, default to postgresql
-    config = {}
+
+    config_params = {}
     if parser.has_section(section):
         params = parser.items(section)
-        for param in params:
-            config[param[0]] = param[1]
+        for p in params:
+            config_params[p[0]] = p[1]
     else:
-        raise Exception('Section {0} not found in the {1} file'.format(section, filename))
-    return config
-if __name__ == '__main__':
-    config = load_config()
-    print(config)
+        print(f"File {filename} or section {section} not found!")
+        
+    return config_params
