@@ -410,7 +410,6 @@ class LeaderboardScreen(Screen):
         
         data = self.db.get_leaderboard()
         
-        # Заголовки
         headers = ["#", "Name", "Score", "Lvl", "Date"]
         xs = [50, 150, 350, 450, 550]
         
@@ -487,10 +486,8 @@ class SettingsScreen(Screen):
         self.screen.blit(left_text, left_text.get_rect(center=left_rect.center))
         self.screen.blit(right_text, right_text.get_rect(center=right_rect.center))
         
-        # Сетка
         self.grid_btn.draw(self.screen, self.font)
         
-        # Кнопки Save и Back
         self.save_btn.draw(self.screen, self.font)
         self.back_btn.draw(self.screen, self.font)
     
@@ -511,18 +508,18 @@ class SettingsScreen(Screen):
     def handle(self, event):
         self.settings['snake_color'] = list(self.colors[self.color_index])
         
-        # Кнопка Grid
+        #Grid
         if self.grid_btn.handle(event):
             self.settings['grid'] = not self.settings['grid']
             self.grid_btn.text = f"Grid: {'ON' if self.settings['grid'] else 'OFF'}"
         
-        # Кнопка Save
+        #button Save
         if self.save_btn.handle(event):
             with open('settings.json', 'w') as f:
                 json.dump(self.settings, f)
             return 'save'
         
-        # Кнопка Back
+        # Back
         if self.back_btn.handle(event):
             return 'save'
         
@@ -617,12 +614,11 @@ def main():
             elif state == "settings":
                 if settings_screen.handle(event) == 'save':
                     state = "menu"
-                    # Обновляем настройки в игре, если она запущена
                     if game:
                         game.settings = settings_screen.settings
                         game.snake.color = tuple(settings_screen.settings['snake_color'])
         
-        # Отрисовка
+        #rendering
         if state == "menu":
             menu.draw()
         elif state == "game" and game:

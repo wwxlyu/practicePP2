@@ -3,7 +3,6 @@ import os
 from configparser import ConfigParser
 
 def load_config(filename='database.ini', section='postgresql'):
-    # Helper to find the file in the same folder as this script
     base_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(base_dir, filename)
 

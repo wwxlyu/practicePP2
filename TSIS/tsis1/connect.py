@@ -9,7 +9,7 @@ def get_connection():
 if __name__ == '__main__':
     try:
         connection = get_connection()
-        print(" Подключение к базе данных установлено успешно!")
+        print(" Succesful!")
         connection.close()
     except Exception as e:
-        print(f"Ошибка подключения: {e}")
+        print(f"Error: {e}")
