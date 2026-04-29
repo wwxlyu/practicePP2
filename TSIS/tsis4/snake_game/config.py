@@ -1,5 +1,3 @@
-# Central place for every magic number / constant used across the project.
-# Import this module in every other file so values are never duplicated.
 
 #Window / Grid 
 CELL_SIZE   = 20          # pixels per grid cell
