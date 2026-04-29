@@ -19,7 +19,7 @@ def setup_database():
             cur.execute("DROP FUNCTION IF EXISTS get_contacts_paginated(INTEGER, INTEGER) CASCADE")
             cur.execute("DROP PROCEDURE IF EXISTS add_phone(VARCHAR, VARCHAR, VARCHAR) CASCADE")
             cur.execute("DROP PROCEDURE IF EXISTS move_to_group(VARCHAR, VARCHAR) CASCADE")
-            print("✓ Cleanup completed")
+            print("Cleanup completed")
         except Exception as e:
             print(f"  Note: {e}")
         
@@ -42,11 +42,11 @@ def setup_database():
         print("✓ Procedures created")
         
         cur.close()
-        print("\n✅ Database setup completed successfully!")
+        print("\nDatabase setup completed successfully!")
         print("\nYou can now run: python phonebook.py")
         
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\n Error: {e}")
         print("\nPlease check:")
         print("1. PostgreSQL is running")
         print("2. database.ini has correct credentials")

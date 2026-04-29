@@ -6,7 +6,6 @@ import os
 import random
 from datetime import datetime
 
-# ============ НАСТРОЙКИ ============
 def load_settings():
     default = {'snake_color': [0,255,0], 'grid': True, 'sound': True}
     if os.path.exists('settings.json'):
@@ -23,7 +22,6 @@ def load_settings():
         json.dump(default, f)
     return default
 
-# ============ БАЗА ДАННЫХ (файловая) ============
 class Database:
     def __init__(self):
         self.file = 'game_data.json'
@@ -38,8 +36,7 @@ class Database:
                 data = json.load(f)
         except:
             data = {"sessions": []}
-        
-        # Убедимся, что sessions существует
+    
         if "sessions" not in data:
             data["sessions"] = []
         
@@ -79,7 +76,6 @@ class Database:
         scores = [s['score'] for s in data['sessions'] if s['username'] == username]
         return max(scores) if scores else 0
 
-# ============ КНОПКА ============
 class Button:
     def __init__(self, x, y, w, h, text, color, hover):
         self.rect = pygame.Rect(x, y, w, h)
@@ -100,7 +96,6 @@ class Button:
             self.hovered = self.rect.collidepoint(event.pos)
         return event.type == pygame.MOUSEBUTTONDOWN and self.hovered
 
-# ============ ЗМЕЙКА ============
 class Snake:
     def __init__(self, color):
         self.body = [[400,300]]
@@ -140,7 +135,6 @@ class Snake:
         if [new[0]*-1, new[1]*-1] != self.dir:
             self.dir = new
 
-# ============ ЕДА ============
 class Item:
     def __init__(self, w, h, cell, color, obstacles):
         self.w, self.h, self.cell = w, h, cell
@@ -157,7 +151,6 @@ class Item:
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, (*self.pos, self.cell, self.cell))
 
-# ============ ИГРА ============
 class Game:
     def __init__(self, screen, db, username, settings):
         self.screen = screen
@@ -348,8 +341,6 @@ class Game:
             elif event.key == pygame.K_ESCAPE:
                 return 'quit'
         return 'game_over' if self.game_over else None
-
-# ============ ЭКРАНЫ ============
 class Screen:
     def __init__(self, screen, font, db=None):
         self.screen = screen
@@ -381,8 +372,7 @@ class MenuScreen(Screen):
     def draw(self):
         self.screen.fill((0,0,0))
         self.draw_text("SNAKE GAME", 80, (255,255,0), 60)
-        
-        # Поле ввода имени
+
         box = pygame.Rect(self.cx-150, 170, 300, 50)
         pygame.draw.rect(self.screen, (50,50,50), box)
         pygame.draw.rect(self.screen, (255,255,255), box, 2)
@@ -395,7 +385,6 @@ class MenuScreen(Screen):
             btn.draw(self.screen, self.font)
     
     def handle(self, event):
-        # Ввод имени
         if event.type == pygame.KEYDOWN and self.active:
             if event.key == pygame.K_RETURN:
                 if self.username:
@@ -405,13 +394,11 @@ class MenuScreen(Screen):
             elif len(self.username) < 20 and event.unicode.isalnum():
                 self.username += event.unicode
         
-        # Кнопки
         for key, btn in self.buttons.items():
             if btn.handle(event):
                 return key
         return None
 
-# Таблица лидеров
 class LeaderboardScreen(Screen):
     def __init__(self, screen, font, db):
         super().__init__(screen, font, db)
@@ -450,14 +437,13 @@ class LeaderboardScreen(Screen):
             return 'back'
         return None
 
-# Настройки - рабочая версия
 class SettingsScreen(Screen):
     def __init__(self, screen, font):
         super().__init__(screen, font)
         self.settings = load_settings()
         
         # Два цвета
-        self.colors = [(0,255,0), (255,0,0)]  # Зеленый, Красный
+        self.colors = [(0,255,0), (255,0,0)]  
         self.color_index = 0 if self.settings['snake_color'] == [0,255,0] else 1
         
         # Кнопки
@@ -507,12 +493,11 @@ class SettingsScreen(Screen):
         # Кнопки Save и Back
         self.save_btn.draw(self.screen, self.font)
         self.back_btn.draw(self.screen, self.font)
-        
-        # Обрабатываем нажатия на кнопки выбора цвета прямо здесь
+    
         mouse = pygame.mouse.get_pressed()
         pos = pygame.mouse.get_pos()
         
-        if mouse[0]:  # Левая кнопка мыши нажата
+        if mouse[0]:  
             if left_rect.collidepoint(pos) and not self.left_clicked:
                 self.color_index = 0
                 self.left_clicked = True
@@ -524,7 +509,6 @@ class SettingsScreen(Screen):
             self.right_clicked = False
     
     def handle(self, event):
-        # Сохраняем выбранный цвет в настройках
         self.settings['snake_color'] = list(self.colors[self.color_index])
         
         # Кнопка Grid
@@ -543,7 +527,6 @@ class SettingsScreen(Screen):
             return 'save'
         
         return None
-# Экран Game Over
 class GameOverScreen(Screen):
     def __init__(self, screen, font, db, username, score, level, best):
         super().__init__(screen, font, db)
@@ -571,7 +554,6 @@ class GameOverScreen(Screen):
             return 'menu'
         return None
 
-# ============ ГЛАВНЫЙ ЦИКЛ ============
 def main():
     pygame.init()
     screen = pygame.display.set_mode((800, 600))

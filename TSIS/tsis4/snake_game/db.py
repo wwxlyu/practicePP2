@@ -10,13 +10,12 @@ class Database:
         self.use_postgres = False
         self.data_file = 'game_data.json'
         
-        # Try to connect to PostgreSQL
         try:
             self.conn = psycopg2.connect(
                 host="localhost",
-                database="postgres",  # Try to connect to default database first
+                database="postgres",  
                 user="postgres",
-                password="postgres",  # Default password, change if needed
+                password="postgres",  
                 port="5432"
             )
             self.use_postgres = True
