@@ -64,10 +64,10 @@ def main():
     
     running = True
     while running:
-        # 1. draw the saved canvas to the screen first
+        #draw the saved canvas to the screen first
         screen.blit(canvas, (0, 0))
         
-        # 2. check what the user is doing (clicks, keys)
+        #check what the user is doing (clicks, keys)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
