@@ -47,12 +47,11 @@ def draw_shape(surface, color, start, end, shape_type, width):
 
 def flood_fill(surface, position, fill_color):
     """fills a shape with color. uses a stack instead of recursion so it doesn't crash on big areas"""
-    # change rgb color to a number so pygame can check it faster
     fill_color_mapped = surface.map_rgb(fill_color)
     x, y = position
     width, height = surface.get_size()
     
-    # grab the pixels directly (this locks the canvas while we do it)
+    # grab the pixels directly
     pixel_array = pygame.PixelArray(surface)
     target_color_mapped = pixel_array[x, y]
 
@@ -78,5 +77,4 @@ def flood_fill(surface, position, fill_color):
                 stack.append((cx, cy - 1))
                 stack.append((cx, cy + 1))
                 
-    # we are done, unlock the canvas so pygame can draw normally again
     pixel_array.close()
